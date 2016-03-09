@@ -226,7 +226,7 @@ function create_config( )
     "gps",
     "hello",
     "spammer",
-    weather",
+    "weather",
     "get",
     "broadcast",
     "download_media",
