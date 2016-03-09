@@ -218,7 +218,7 @@ function create_config( )
     "owners",
     "arabic_lock",
     "set",
-    "get",
+    "weather",
     "9gag",
     "btc",
     "calculator",
@@ -226,9 +226,8 @@ function create_config( )
     "gps",
     "hello",
     "spammer",
-    "stats",
-    "time",
-    "weather",
+    weather",
+    "get",
     "broadcast",
     "download_media",
     "invite",
@@ -250,7 +249,7 @@ Admins
 @aryanes81 [Developer]
 @aryanes81 [Manager]
 
-Special thanks to
+tashakor makhsos az:
 aryan
 alfred
 raddy
