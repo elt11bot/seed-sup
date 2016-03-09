@@ -1,37 +1,83 @@
-local function get_variables_hash(msg)
-  if msg.to.type == 'chat' then
-    return 'chat:'..msg.to.id..':variables'
-  end
-end 
+local _file_values = './data/values.lua'
 
-local function get_value(msg, var_name)
-  local hash = get_variables_hash(msg)
-  if hash then
-    local value = redis:hget(hash, var_name)
-    if not value then
-      return
-    else
-      return var_name..' :\n'..value
-    end
+function read_file_values( )
+  local f = io.open(_file_values, "r+")
+  -- If file doesn't exists
+  if f == nil then
+    -- Create a new empty table
+    print ('Created value file '.._file_values)
+    serialize_to_file({}, _file_values)
+  else
+    print ('Stats loaded: '.._file_values)
+    f:close() 
   end
+  return loadfile (_file_values)()
 end
 
-local function run(msg, matches)
-  if not is_momod(msg) then -- only for mods,owner and admins
-    return 
+_values = read_file_values()
+
+function fetch_value(chat, value_name)
+  if (_values[chat] == nil) then
+    return nil
   end
-  if matches[2] then
-    local name = user_print_name(msg.from)
-    savelog(msg.to.id, name.." ["..msg.from.id.."] used /get ".. matches[2])-- save to logs
-    return get_value(msg, matches[2])
-  else
-    return
+  if (value_name == nil ) then
+    return nil
+  end 
+  local value = _values[chat][value_name]
+  return value
+end
+
+function get_value(chat, value_name)
+
+  -- If chat values is empty
+  if (_values[chat] == nil) then
+    return "There isn't any data"
   end
+
+  -- If there is not value name, return all the values.
+  if (value_name == nil ) then
+    local text = ""
+    for key,value in pairs(_values[chat]) do
+      text = text..key.." = "..value.."\n"
+    end
+    return text
+  end 
+  local value = _values[chat][value_name]
+  if ( value == nil) then
+    return "Can't find "..value_name
+  end
+  return value_name.." = "..value
+end
+
+function run(msg, matches)
+  local chat_id = tostring(msg.to.id)
+  if matches[1] == "!get" then
+    return get_value(chat_id, nil)
+  end  
+   return get_value(chat_id, matches[1])
+end
+
+function lex(msg, text)
+  local chat_id = tostring(msg.to.id)
+  local s, e = text:find("%$%a+")
+  if (s == nil) then 
+    return nil
+  end
+  local var = text:sub(s + 1, e)
+  local value = fetch_value(chat_id, var)
+  if (value == nil) then
+    value = "(unknown value " .. var .. ")"
+  end
+  return text:sub(0, s - 1) .. value .. text:sub(e + 1)
 end
 
 return {
-  patterns = {
-    "^([!/]get) (.+)$"
-  },
-  run = run
+    description = "retrieves variables saved with !set", 
+    usage = "!get (value_name)",
+    patterns = {
+      "^!get (%a+)$",
+      "^!get$"}, 
+    run = run,
+    lex = lex
 }
+
