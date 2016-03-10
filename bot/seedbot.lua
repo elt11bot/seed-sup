@@ -256,14 +256,12 @@ created by @aryanes81
 
 Admins
 @aryanes81 [Founder]
-@aryanes81 [Developer]
-@aryanes81 [Developer]
+@R_A_D_D_Y [Developer]
 @aryanes81 [Manager]
 
 tashakor makhsos az:
 aryan
 alfred
-raddy
 va baghie dostan....
 
 Our channels
