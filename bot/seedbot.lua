@@ -431,7 +431,7 @@ Commands list :
 
 !kick [username|id]
 You can also do it by reply
-
+اخراج از گروه
 !ban [ username|id]
 You can also do it by reply
 
