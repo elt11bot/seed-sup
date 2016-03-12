@@ -217,8 +217,6 @@ function create_config( )
     "anti_spam",
     "get",
     "google",
-    "bot",
-    "help",
     "images",
     "lock_media",
     "lock_share",
